@@ -31,21 +31,33 @@ Readme file of Test-Indigital Assignment
 	http://localhost:8000/create-new-company-user will get called.
 
 3.Views 
+
 	i.location--TEST-Indigital/resources/views/company-user-registration.blade.php 
+	
 	ii.what is .blade after view name --Blade is the simple, yet powerful templating engine provided with Laravel.
+	
 	iii.use of blade template--- for reducing or simplifying the code that you write in your view
+	
 	e.g     <?php echo strtoupper('hello') ?>(PHP VIEW .php ) ==   {{strtoupper('hello')}} (BLADE VIEW .blade.php).
+	
 
 	1.create user view
+	
 	  i.Simple registration form with fields names
+	  
 	  ii.I here want to Mention that I create App.blade.php file Where I create Actual Layout Of The Project And That Layout Is Same For All pages, if you check That Layout Of Home Page and Company Users and Create Company User page Is Same Just The Content In Body Of Each Page Will Change and From App.blade.php i call All Js And Css Wants To Used In My Project.
+	  
 	  iii.CSS Files Used In Project
 	  	  - style.css (TEST-Indigital/public/css/style.css) for styling.
+		  
           iv.Js Files Used In Project
 	  	  - TEST-Indigital/public/js/jquery.validate.min.js & TEST-Indigital/public/js/company-registration-form.js for validation and form submission to server side.
+		  
 	  v.In app.blade.php view at top include <meta name="csrf-token" content="{{ csrf_token() }}"> this line
-	  	  i.Cross-Site-Request-Forgery is used to protect your application from cross-site request forgery (CSRF) attacks. 
+	  	  i.Cross-Site-Request-Forgery is used to protect your application from cross-site request forgery (CSRF) attacks.
+		  
 	  iv.Re-Captcha Reference-site-https://github.com/anhskohbo/no-captcha
+	  
 	  	  i. Step 1. Install package
 	  	  		composer require anhskohbo/no-captcha
 	  	  ii.Step 2. Register the Recaptch service provider
