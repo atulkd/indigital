@@ -5,13 +5,12 @@ Readme file of Test-Indigital Assignment
 
 ************ TASK1 Company User Registration ************
 
-
-
 1.Once You Successfully Run Project,You See the Default or Home Page.On Home Page You Will see the Message "Welcome To Test-Indigital" and Also The Counts Of User Which Was Registred in Company.
 2.Now If You check Header Of Page, There are Options Or Menu's are Available. 1st.Home,2nd Company Users and 3rd Contact-List.
 3.If You Are clicked on Home Menu You Will Remain On Same Page On Which You Come After Successufuly execute project.
 4.Then If You Are Clicked On Company Users Menu You will See The List Of Company Users Which was Added and Also there is One Button "Add New User".
 5.Now If You Clicked On "Add New User Button" It Will Redirect You On Company User Registration Form.
+
 
 ************ Explaination Of Company User Registration Form Working************
 
@@ -24,7 +23,8 @@ Readme file of Test-Indigital Assignment
 	{
     return view('company-user-registration');
 	});
-	iii.return view('company-user-registration') is the view name that we have to show  whenever  http://localhost:8000/create-new-company-user will get called.
+	iii.return view('company-user-registration') is the view name that we have to show  whenever 
+	http://localhost:8000/create-new-company-user will get called.
 
 3.Views 
 	i.location--TEST-Indigital/resources/views/company-user-registration.blade.php 
@@ -121,93 +121,94 @@ Readme file of Test-Indigital Assignment
 				remote: It is used to do server side validation.To check this email id is already exist or not.it returns boolean value from server side.true means user is new and false means existing user.
 					regex:To validate mobile no.customized validation for that.To use this we have to add this method before validation. 
 
-					$.validator.addMethod(
-						 "regex",
-						 function(value, element, regexp) {
-		   			 var check = false;
-		   			 return this.optional(element) || regexp.test(value);
-					 },);
+$.validator.addMethod(
+	 "regex",
+	 function(value, element, regexp) {
+ var check = false;
+ return this.optional(element) || regexp.test(value);
+ },);
 
-					 url:'check-user-mobile-availability',
-					 In route-Route::post('check-user-email-availability', 'UserController@checkUserEmail');
-				4.  messages=customized messages 
+ url:'check-user-mobile-availability',
+ In route-Route::post('check-user-email-availability', 'UserController@checkUserEmail');
+4.  messages=customized messages 
 
-					  cmp_usr_email: {
-      							required: "Enter User email.",
-      							email: "Enter valid email.",
-      							remote: "Email has already been used. Please use another Email address.",
-    							},
-				5.errorPlacement=User defined place where error msg will get displayed
+  cmp_usr_email: {
+		required: "Enter User email.",
+		email: "Enter valid email.",
+		remote: "Email has already been used. Please use another Email address.",
+		},
+5.errorPlacement=User defined place where error msg will get displayed
 
-					  errorPlacement: function(error, element){
-   					 error.appendTo( element.next('.error-message') );
-  						},
+  errorPlacement: function(error, element){
+ error.appendTo( element.next('.error-message') );
+	},
 
-  				6.submitHandler=Use to submit data after successful validation.
+6.submitHandler=Use to submit data after successful validation.
 
-  						i.dataString = $('#company-user-registration-form').serialize();
-  							-The serialize() method creates a URL encoded text string by serializing form values.
-  						ii.$.ajax({ =to submit data.
-  						iii.type:'POST'
-  							-For a request-response between a client and server.
-  						iv.data: dataString, it contains all the filds values data like email,mobile.
-  						v.dataType: 'json', serializing and transmitting structured data over a network connection.
-  						vi. headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
-  							-to submit form through ajax add the CSRF in the header of the ajax call otherwise system we through 419 status.we added that line in view too.
-  						vii.  cache: false,=By setting the cache property to false jQuery will append a timestamp to the URL, so the browser won't cache it.
-  						viii.beforeSend: function(){  $('#form_submit').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:18px"></i> Processing');$('#form_submit').attr('disabled','disabled'); },
-  								-The action we have to take before submitting data.Here we are changing the button text from submit to processing and  disabling the button.So that user unable to click button more than once.Preventing from multiple entries.
-  						ix.url: "insert-company-user",
+i.dataString = $('#company-user-registration-form').serialize();
+	-The serialize() method creates a URL encoded text string by serializing form values.
+ii.$.ajax({ =to submit data.
+iii.type:'POST'
+	-For a request-response between a client and server.
+iv.data: dataString, it contains all the filds values data like email,mobile.
+v.dataType: 'json', serializing and transmitting structured data over a network connection.
+vi. headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
+-to submit form through ajax add the CSRF in the header of the ajax call otherwise system we through 419 status.we added that line in view too.
+vii.  cache: false,=By setting the cache property to false jQuery will append a timestamp to the URL, so the browser won't cache it.
+viii.beforeSend: function(){  $('#form_submit').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:18px"></i> Processing');$('#form_submit').attr('disabled','disabled'); },
+		-The action we have to take before submitting data.Here we are changing the button text from submit to processing and  disabling the button.So that user unable to click button more than once.Preventing from multiple entries.
+ix.url: "insert-company-user",
 
-  				7.Now controller to insert data--- UserController@createUser ---TEST-Indigital/app/Http/Controllers/UserController.php
-  						i.Server side validations Validation :-Here we are using inbuild validation library of laravel.
-  							1.$user_fields = Input::only('cmp_usr_name','cmp_usr_email',)=The input fields we have to validate.
-  							2. $error_message= array('cmp_usr_name.required'=>"Enter User Name.", 'cmp_usr_email.required'=>"Enter User email.")=For customized messages.
-  							3. $rules = array(
-   						              'cmp_usr_mobile' =>'required','usr_mobile' =>'min:10|max:10|unique:users',
-							      'cmp_usr_email' =>'required','email' =>'email|unique:users',
-							      	-Specify the validation you want in the rules.
-							      	-Rule::unique=To check data is already exist or not.
-							4.$validation_result=Validator:: make($user_fields,$rules,$error_message);=TO validate.
-							5.if($validation_result->fails())
-							  {
-								echo json_encode(array('success'=>false,'message'=>$validation_result->errors()->all(),'error_type'=>'user'));  -> if validation fails it will send Error messages throug ajsx response.
+7.Now controller to insert data--- UserController@createUser ---TEST-Indigital/app/Http/Controllers/UserController.php
 
-							  }
-							5. else //if validation passes.
-							{
-								Write insertion code.
-								$user =new User;  ->create an object of users model
-								For e.g
-								   $user->name=trim($req->cmp_usr_name);
-                $user->email=trim($req->cmp_usr_email);
-                $user->usr_mobile=trim($req->cmp_usr_mobile);
+i.Server side validations Validation :-Here we are using inbuild validation library of laravel.
+1.$user_fields = Input::only('cmp_usr_name','cmp_usr_email',)=The input fields we have to validate.
+2. $error_message= array('cmp_usr_name.required'=>"Enter User Name.", 'cmp_usr_email.required'=>"Enter User email.")=For customized messages.
+3. $rules = array(
+'cmp_usr_mobile' =>'required','usr_mobile' =>'min:10|max:10|unique:users',
+'cmp_usr_email' =>'required','email' =>'email|unique:users',
+-Specify the validation you want in the rules.
+-Rule::unique=To check data is already exist or not.
+4.$validation_result=Validator:: make($user_fields,$rules,$error_message);=TO validate.
+5.if($validation_result->fails())
+{
+echo json_encode(array('success'=>false,'message'=>$validation_result->errors()->all(),'error_type'=>'user'));  -> if validation fails it will send Error messages throug ajsx response.
 
-                $user->password=bcrypt(trim($req->cmp_usr_password));
-                $user->usr_cmp_name=trim($req->cmp_name);
-                $user->usr_designation=trim($req->cmp_usr_designation);
-                $user->usr_cmp_size=trim($req->cmp_size);
-                $user->usr_status=1;
-                //$user->usr_created_at=date('Y-m-d H:i:s');
-                $user->save();   //Data stored in Database using this code
+}
+5. else //if validation passes.
+{
+Write insertion code.
+$user =new User;  ->create an object of users model
+For e.g
+   $user->name=trim($req->cmp_usr_name);
+$user->email=trim($req->cmp_usr_email);
+$user->usr_mobile=trim($req->cmp_usr_mobile);
 
-								                    
-     							How to store data in session= array('ass_usr_id' => $user->id,'ass_usr_name'  => Input::get('usr_name'),);Session::push('user', $userdata);
-     							How to get stored values in the session={{ Session::get('user')[0] ['ass_usr_name']}}
-     							After successful insertion we will send  response to ajax to proceed further in json format.
-     								-  echo json_encode(array("success"=>true,"message"=>"Added new records.","linkn"=>'users'));
-							}
-							$req->session()->flash('create_user', 'Company User Is Added Successfully'); //using this command data store in session 
-
-					7.Ajax response
-						i.response can be either true or false.
-						 	success: function(response)
-						  	{if(response.success==true){ window.location.href=response.linkn;}}=if response is true then we redirect the user to user list view.
+$user->password=bcrypt(trim($req->cmp_usr_password));
+$user->usr_cmp_name=trim($req->cmp_name);
+$user->usr_designation=trim($req->cmp_usr_designation);
+$user->usr_cmp_size=trim($req->cmp_size);
+$user->usr_status=1;
+//$user->usr_created_at=date('Y-m-d H:i:s');
+$user->save();   //Data stored in Database using this code
 
 
-	************ TASK2 manage Contacts ************	
+How to store data in session= array('ass_usr_id' => $user->id,'ass_usr_name'  => Input::get('usr_name'),);Session::push('user', $userdata);
+How to get stored values in the session={{ Session::get('user')[0] ['ass_usr_name']}}
+After successful insertion we will send  response to ajax to proceed further in json format.
+	-  echo json_encode(array("success"=>true,"message"=>"Added new records.","linkn"=>'users'));
+}
+$req->session()->flash('create_user', 'Company User Is Added Successfully'); //using this command data store in session 
+
+7.Ajax response
+i.response can be either true or false.
+success: function(response)
+{if(response.success==true){ window.location.href=response.linkn;}}=if response is true then we redirect the user to user list view.
+
+************ TASK2 manage Contacts ************	
+	
 1.http://localhost:8000/ Hit this URL
-2.Now click on Contc-List Menu
+2.Now click on Contact-List Menu
 3.You be redirected to http://localhost:8000/create-new-company-user this URL
 	i.This form will to show the Contact List That We are added From Company User Registration Form.
 	ii.This Will show an Contact List.On this form you will show an Name Of an Contact and Number Of Contact.
